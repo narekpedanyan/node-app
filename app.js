@@ -1,28 +1,18 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const server = http.createServer((req, res) => {
-    const url = req.url;
-    const method = req.method;
-    if (url === '/') {
-        res.write('<html>');
-        res.write('<head><title>Form page</title></head>');
-        res.write('<body><form action="/message" method="POST"><input type="text" /><button type="submit">Submit</button></form></body>')
-        res.write('</html>');
-        res.end();
-    } else {
-        res.write('<html>');
-        res.write('<head><title>Form page</title></head>');
-        res.write('<body>Some body text</body>');
-        res.write('</html>');
-        res.end();
-    }
-    if (url === '/message' && method === 'POST') {
-        fs.writeFileSync('message.txt', 'DUMMY');
-        res.statusCode = 302;
-        res.setHeader('Location', '/');
-        return res.end();
-    }
+const app = express();
+
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(adminRoutes);
+app.use(shopRoutes);
+
+app.use('/', (req, res, next) => {
+    res.send('<h1>The home page!</h1>')
 });
 
-server.listen(3000);
+app.listen(3000);
