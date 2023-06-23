@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -11,8 +12,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(adminRoutes);
 app.use(shopRoutes);
 
-app.use('/', (req, res, next) => {
-    res.send('<h1>The home page!</h1>')
+app.use((req, res, next) => {
+    res.status(400).sendFile(path.join(__dirname, 'views', '404.html'));
 });
 
 app.listen(3000);
