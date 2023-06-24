@@ -10,13 +10,13 @@ router.get('/product', (req, res, next) => {
     res.send('<h1>The single product!</h1>');
 });
 
-router.use('/add-product', (req, res, next) => {
+router.use('/admin/add-product', (req, res, next) => {
     res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 });
 
-router.post('/admin/add-product', (req, res, next) => {
-   console.log(req.body);
-   res.redirect('/');
-});
+// router.post('/admin/add-product', (req, res, next) => {
+//    console.log(req.body);
+//    res.redirect('/');
+// });
 
 module.exports = router;
