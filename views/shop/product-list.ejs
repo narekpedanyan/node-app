@@ -13,9 +13,9 @@
             </header>
             <div class="card_image">
                 <img
-                        src="<%= product.imageUrl %>"
-                        alt=""
-                        width="250px"
+                    src="<%= product.imageUrl %>"
+                    alt=""
+                    width="250px"
                 />
             </div>
             <div class="card_content">
@@ -27,7 +27,9 @@
                 </p>
             </div>
             <div class="card_actions">
-                <button type="button">Add to cart!</button>
+                <form action="/add-to-cart" method="POST">
+                    <button type="button">Add to cart!</button>
+                </form>
             </div>
         </article>
         <% } %>

@@ -37,3 +37,20 @@ main {
 .main-header__item a.active {
     color: #9d1fb9;
 }
+
+.btn {
+    border: 1px solid #141414;
+    text-decoration: none;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    color: #141414;
+}
+
+.df {
+    display: flex;
+}
+.df.aic {
+    align-items: center;
+}
