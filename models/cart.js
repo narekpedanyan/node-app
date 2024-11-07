@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require("path");
+const {stringify} = require("nodemon/lib/utils");
 const p = path.join(
     path.dirname(process.mainModule.filename),
     'data',
@@ -18,6 +19,7 @@ module.exports = class Cart {
             let cart = { products: [], totalPrice: 0 }
             if (!err) {
                 cart = JSON.parse(fileContent);
+                console.log(cart, 'cart');
             }
             const existingProductIndex = cart.products.findIndex((prod) => prod.id === id);
             const existingProduct = cart.products[existingProductIndex];
@@ -41,7 +43,20 @@ module.exports = class Cart {
                 console.log(err, 'err');
             })
         })
-        // Analyze the cart => Find existing product
-        // Add new product/ increase quantity
+    }
+    static deleteProduct(id, productPrice) {
+        fs.readFile(p, (err, fileContent) => {
+            if (err) {
+                return;
+            }
+            const updatedCart = JSON.parse(fileContent);
+            const product = updatedCart.products.find((prod) => prod.id === id);
+            const productQty = product.qty;
+            updatedCart.products = updatedCart.products.filter((prod) => prod.id !== id);
+            updatedCart.totalPrice = updatedCart.totalPrice - productPrice * productQty;
+            fs.writeFile(p, JSON.stringify(updatedCart), err => {
+                console.log(err, 'err');
+            })
+        });
     }
 }
