@@ -17,11 +17,14 @@ exports.postAddProduct =  (req, res, next) => {
         null,
         title,
         imageUrl,
-        price,
         description,
+        price,
     );
-    product.save();
-    res.redirect('/');
+    product.save().then(
+        () => {
+            res.redirect('/');
+        }
+    ).catch(err => console.log(err, 'err'))
 }
 
 exports.getEditProduct =  (req, res, next) => {
