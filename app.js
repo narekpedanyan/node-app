@@ -10,6 +10,8 @@ const Product = require('./models/product');
 const User = require('./models/user');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 const app = express();
 
@@ -28,8 +30,10 @@ const shopRoutes = require('./routes/shop');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const currentUserId = 1;
+
 app.use((req,res,next)=>{
-    User.findByPk(11)
+    User.findByPk(currentUserId)
         .then(user => {
             req.user = user;
             next();
@@ -54,21 +58,33 @@ Cart.belongsToMany(Product, {
 Product.belongsToMany(Cart, {
     through: CartItem,
 });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, {
+    through: OrderItem
+});
 
+let currentUser;
 sequelize
     // .sync({ force: true })
     .sync()
     .then(result => {
-        return User.findByPk(11);
+        return User.findByPk(currentUserId);
     })
     .then(user => {
         if (!user) {
-            return User.create({ name: 'Max Hollowe', email: 'naropedan@gmail.com' });
+            return User.create({ name: 'Arturo Gatti', email: 'naropedan+1@gmail.com' });
         }
         return user;
     })
     .then(user => {
-        return user.createCart();
+        currentUser = user;
+        return user.getCart();
+    })
+    .then(cart => {
+        if (!cart) {
+            return currentUser.createCart();
+        }
     })
     .then(cart => {
         app.listen(3000);
